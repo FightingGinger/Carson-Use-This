@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /* CS 445 - Computer Architecture & Organization
  * File Name: BigEndianMemorySystem.java
  * Project 1 - Due 10/18/2015
@@ -42,6 +44,9 @@ public class BigEndianMemorySystem
 	// AND UNDERSTAND THE REQUIRMENTS DETAILED IN THE PROJECT DESCRIPTION.
 	
 	///////////////////////////////////////////////////////////////////////
+	
+	private String[][] memory  = new String[4][160];
+	
 	// Constructor (you may modify this as you see fit)
 	BigEndianMemorySystem()
 	{
@@ -54,7 +59,7 @@ public class BigEndianMemorySystem
 	// pass anything other than raw data (no helper variables). This method
 	// will receive the raw bytes and convert it to it's own system, overwriting
 	// it's internal memory.
-	public void receiveRawBytesFromLittleEndianMem(???)
+	public void receiveRawBytesFromLittleEndianMem(byte[][] littleEndian)
 	{
 		
 	}
@@ -62,9 +67,9 @@ public class BigEndianMemorySystem
 	///////////////////////////////////////////////////////////////////////
 	// Gets a copy of the raw bytes (should be instance variable) and returns
 	// it to caller. See above comment for hint on what data type would be best
-	public ??? getRawBytes()
+	public Object getRawBytes()
 	{
-		
+		return null;
 	}
 	
 	///////////////////////////////////////////////////////////////////////
@@ -72,6 +77,30 @@ public class BigEndianMemorySystem
 	// description
 	public void printRawBytes()
 	{
+		for (int i = 0; i < memory.length;i++)
+		{
+			for(int j = 0; j < memory[i].length;j++)
+			{
+				System.out.print(memory[i][j]);
+			}
+			System.out.println();
+		}
+	}
+	
+	public void addData(String data, int row, Boolean isInt)
+	{
+		int actualRow = row / 4;
+		ArrayList dataArray = new ArrayList();
+		
+		for (int i = 0; i < data.length();i++)
+		{
+			dataArray.add(data[i]);
+		}
+		
+		for (int i = 0; i < dataArray.size();i++)
+		{
+			
+		}
 		
 	}
 }

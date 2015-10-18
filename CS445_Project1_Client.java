@@ -1,11 +1,15 @@
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.StringTokenizer;
+
 /* CS 445 - Computer Architecture & Organization
  * File Name: CS445_Project1_Client.java
- * Project 1 - Due 10/18/2015
+ * Project 1 - Due X/XX/XXXX
  * Instructor: Dr. Dan Grissom
  * 
- * Name: Josh Dubisz
- * Name: Carson Hall
- * Description: Insert your meaningful description for the BigEndianMemorySystem class.
+ * Name: FirstName LastName
+ * Name: FirstName LastName
+ * Description: Insert your meaningful description for the CS445_Project1_Client client.
  */
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,6 +46,54 @@ public class CS445_Project1_Client
 		System.out.println("Josh Dubisz & Carson Hall");
 		System.out.println("CS445 Project 1");
 		System.out.println("");
+		
+		String[][] array = new String [160][4];
+		for (String[] row : array)
+		    Arrays.fill(row, "0");
+		
+		System.out.println(Arrays.deepToString(array));
+
+
+		
+		Scanner in = new Scanner(System.in);
+		System.out.println("enter a string");
+		String str = in.nextLine();
+		
+		// str is the input
+		// use the spaces as delimeters
+        int y = 0;
+        
+		StringTokenizer newstr = new StringTokenizer(str," ");
+        while(newstr.hasMoreTokens()){
+        	
+	    	String temp = newstr.nextToken();
+	    	int len = temp.length();
+	    	int fillLine = len % 4;
+	    	System.out.println(fillLine);
+	    	if(fillLine != 0){
+	    	while(fillLine < 4){
+	    		temp = temp + '$';
+	    		fillLine++;
+	    	}
+	    	}
+            System.out.println(temp);
+            int lines = len/4;
+            //lines is the amount of lines we need for each word
+            //array[y][x]
+            int ch = 0;
+            int positionOfInput = 0;
+            
+            while(y <= lines){
+            	for(int x = 0; x < 4; x++){
+            		char c = temp.charAt(positionOfInput);
+            		array[y][x] = Character.toString(c);
+            		positionOfInput++;
+            	}
+            	y++;
+            }
+        }
+        
+		System.out.println(Arrays.deepToString(array));
 
 		///////////////////////////////////////////////////////////////////////
 		// Your code should go below these comments.
@@ -53,5 +105,6 @@ public class CS445_Project1_Client
 		// When done, your console output should look similar to that seen in the
 		// "User Interface Requirements - Sample Console Input/Output" section of
 		// the project description.
+
 	}
 }
