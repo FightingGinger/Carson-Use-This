@@ -47,7 +47,7 @@ public class BigEndianMemorySystem
 	///////////////////////////////////////////////////////////////////////
 	
 	//creates a byte array to mimic the memory
-	private byte[][] memory  = new byte[160][4];
+	private byte[][] memory  = new byte[20][4];
 	
 	// Constructor (you may modify this as you see fit)
 	BigEndianMemorySystem()
