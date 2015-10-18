@@ -1,3 +1,4 @@
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -85,12 +86,13 @@ public class BigEndianMemorySystem
 	// description
 	public void printRawBytes()
 	{
-		for (int i = 0; i < memory.length;i++)
+		for (int row = 0; row < memory.length;row++)
 		{
+			System.out.print("A" + (row * 4) + ": ");
 			System.out.print("[");
-			for(int j = 0; j < memory[i].length;j++)
+			for(int col = 0; col < memory[row].length;col++)
 			{
-				System.out.print("[" + Integer.toHexString(memory[i][j]) + "]");
+				System.out.print("[" + String.format("%02X", memory[row][col]) + "]");
 			}
 			System.out.print("]");
 			System.out.println();
@@ -98,15 +100,15 @@ public class BigEndianMemorySystem
 	}
 	
 	//TODO Needs error checking for divisible by 4 (maybe should go in client?)
-	//TODO Create a thing for ints where it is 2 numbers per element
-	public void addData(String data, int row, Boolean isInt)
+	//TODO Put flags in memory to differentiate between Strings and ints
+	public void addStringData(String data, int row)
 	{
 		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
 		int col = 0; //0-3 position of the row
-		byte[] charData = data.getBytes(); //Converts data entered by user into a byte array
+		byte[] rawData = data.getBytes(); //Converts data entered by user into a byte array
 		
 		//Goes through the users input character by character and inputs it into the correct memory location
-		for (byte character: charData)
+		for (byte character: rawData)
 		{
 			//if position > 4, resets it to zero. Memory only goes 0-3
 			if (col >= 4)
@@ -116,6 +118,31 @@ public class BigEndianMemorySystem
 			}
 				
 			memory[actualRow][col] = character; //Commits temp to memory
+			col++; //Goes to next column
+		}		
+	}
+	
+	//Same as above, but stores int data instead... 
+	public void addIntData(int data, int row)
+	{
+		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
+		int col = 0; //0-3 position of the row
+		String hex = Integer.toHexString(data); //Converts user input into a string of hex characters
+		int numberOfHexCharacters = (int) Math.ceil((double)hex.length() / 2); //number of hex pairs... divides by 2 because I'm pairing them...
+		int dataCopy = data; //stores users int as a copy
+		
+		//Goes through the users input character by character and inputs it into the correct memory location
+		for(int i = 0; i < numberOfHexCharacters; i++)
+		{
+			//if position > 4, resets it to zero. Memory only goes 0-3
+			if (col >= 4)
+			{
+				col = 0;
+				actualRow++; //goes up to next row when memory runs out of slots
+			}
+				
+			memory[actualRow][col] = (byte)dataCopy; //Commits temp to memory
+			dataCopy = dataCopy >> 8; //Shifts data 1 byte... to the right
 			col++; //Goes to next column
 		}		
 	}
