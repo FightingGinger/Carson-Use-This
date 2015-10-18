@@ -120,30 +120,31 @@ public class BigEndianMemorySystem
 		}
 	}
 	
-	//TODO Needs error checking for divisible by 4 (maybe should go in client?)
 	//TODO Put flags in memory to differentiate between Strings and ints
+	//For characters, data is stored from right to left
 	private void addStringData(String data, int row)
 	{
 		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
-		int col = 0; //0-3 position of the row
+		int col = 3; //0-3 position of the row
 		byte[] rawData = data.getBytes(); //Converts data entered by user into a byte array
 		
 		//Goes through the users input character by character and inputs it into the correct memory location
 		for (byte character: rawData)
 		{
-			//if position > 4, resets it to zero. Memory only goes 0-3
-			if (col >= 4)
+			//if position < 0, resets it to zero. Memory only goes 0-3
+			if (col < 0)
 			{
-				col = 0;
+				col = 3;
 				actualRow++; //goes up to next row when memory runs out of slots
 			}
 				
 			memory[actualRow][col] = character; //Commits temp to memory
-			col++; //Goes to next column
+			col--; //Goes to next column
 		}		
 	}
 	
 	//Same as above, but stores int data instead... 
+	//For Big Endian, data is stored from left to right
 	private void addIntData(int data, int row)
 	{
 		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
@@ -151,19 +152,26 @@ public class BigEndianMemorySystem
 		String hex = Integer.toHexString(data); //Converts user input into a string of hex characters
 		int numberOfHexCharacters = (int) Math.ceil((double)hex.length() / 2); //number of hex pairs... divides by 2 because I'm pairing them...
 		int dataCopy = data; //stores users int as a copy
+		byte[] byteStorage = new byte[numberOfHexCharacters];
 		
-		//Goes through the users input character by character and inputs it into the correct memory location
-		for(int i = 0; i < numberOfHexCharacters; i++)
+		//Stores the hex into a byte array
+		for(int i = 0; i < byteStorage.length; i++)
 		{
-			//if position > 4, resets it to zero. Memory only goes 0-3
+			byteStorage[i] = (byte)dataCopy;
+			dataCopy = dataCopy >> 8; //Shifts data 8 bits to the right
+		}		
+		
+		//Goes through the input byte array and inputs it into the correct memory location
+		for(byte unit : byteStorage)
+		{
+			//if position >= 4, resets it to zero. Memory only goes 0-3
 			if (col >= 4)
 			{
 				col = 0;
 				actualRow++; //goes up to next row when memory runs out of slots
 			}
 				
-			memory[actualRow][col] = (byte)dataCopy; //Commits temp to memory
-			dataCopy = dataCopy >> 8; //Shifts data 1 byte... to the right
+			memory[actualRow][col] = unit; //Commits temp to memory
 			col++; //Goes to next column
 		}		
 	}
