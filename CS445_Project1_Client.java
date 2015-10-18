@@ -47,53 +47,62 @@ public class CS445_Project1_Client
 		System.out.println("CS445 Project 1");
 		System.out.println("");
 		
-		String[][] array = new String [160][4];
-		for (String[] row : array)
-		    Arrays.fill(row, "0");
-		
-		System.out.println(Arrays.deepToString(array));
+//		String[][] array = new String [160][4];
+//		for (String[] row : array)
+//		    Arrays.fill(row, "0");
+//		
+//		System.out.println(Arrays.deepToString(array));
 
 
+		BigEndianMemorySystem mem = new BigEndianMemorySystem();
 		
+		mem.printRawBytes();
+		
+		//Reads the next line
 		Scanner in = new Scanner(System.in);
 		System.out.println("enter a string");
 		String str = in.nextLine();
 		
+		mem.addData(str, 4, false);
+		
+		mem.printRawBytes();
+		
 		// str is the input
 		// use the spaces as delimeters
-        int y = 0;
-        
-		StringTokenizer newstr = new StringTokenizer(str," ");
-        while(newstr.hasMoreTokens()){
-        	
-	    	String temp = newstr.nextToken();
-	    	int len = temp.length();
-	    	int fillLine = len % 4;
-	    	System.out.println(fillLine);
-	    	if(fillLine != 0){
-	    	while(fillLine < 4){
-	    		temp = temp + '$';
-	    		fillLine++;
-	    	}
-	    	}
-            System.out.println(temp);
-            int lines = len/4;
-            //lines is the amount of lines we need for each word
-            //array[y][x]
-            int ch = 0;
-            int positionOfInput = 0;
-            
-            while(y <= lines){
-            	for(int x = 0; x < 4; x++){
-            		char c = temp.charAt(positionOfInput);
-            		array[y][x] = Character.toString(c);
-            		positionOfInput++;
-            	}
-            	y++;
-            }
-        }
-        
-		System.out.println(Arrays.deepToString(array));
+		/**Carson's Code**/
+//        int y = 0;
+//        
+//		StringTokenizer newstr = new StringTokenizer(str," ");
+//        while(newstr.hasMoreTokens()){
+//        	
+//	    	String temp = newstr.nextToken();
+//	    	int len = temp.length();
+//	    	int fillLine = len % 4;
+//	    	System.out.println(fillLine);
+//	    	if(fillLine != 0){
+//	    	while(fillLine < 4){
+//	    		temp = temp + '$';
+//	    		fillLine++;
+//	    	}
+//	    	}
+//            System.out.println(temp);
+//            int lines = len/4;
+//            //lines is the amount of lines we need for each word
+//            //array[y][x]
+//            int ch = 0;
+//            int positionOfInput = 0;
+//            
+//            while(y <= lines){
+//            	for(int x = 0; x < 4; x++){
+//            		char c = temp.charAt(positionOfInput);
+//            		array[y][x] = Character.toString(c);
+//            		positionOfInput++;
+//            	}
+//            	y++;
+//            }
+//        }
+//        
+//		System.out.println(Arrays.deepToString(array));
 
 		///////////////////////////////////////////////////////////////////////
 		// Your code should go below these comments.

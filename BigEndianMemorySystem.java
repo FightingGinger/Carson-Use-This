@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /* CS 445 - Computer Architecture & Organization
  * File Name: BigEndianMemorySystem.java
@@ -42,15 +43,22 @@ public class BigEndianMemorySystem
 	// YOU MAY ADD ANY ADDITIONAL METHODS OR MODIFY THE ONES BELOW. THE 
 	// METHOD TEMPLATES FOUND IN THIS FILE ARE JUST TO HELP YOU GET STARTED
 	// AND UNDERSTAND THE REQUIRMENTS DETAILED IN THE PROJECT DESCRIPTION.
-	
 	///////////////////////////////////////////////////////////////////////
 	
-	private String[][] memory  = new String[4][160];
+	//creates a byte array to mimic the memory
+	private byte[][] memory  = new byte[160][4];
 	
 	// Constructor (you may modify this as you see fit)
 	BigEndianMemorySystem()
 	{
-		
+		//Fills the memory variable with zeros (yo)
+		for(int row = 0; row < 160; row++)
+		{
+			for(int col = 0; col < 4; col++)
+			{
+				memory[row][col] = 0;
+			}
+		}
 	}
 
 	///////////////////////////////////////////////////////////////////////
@@ -79,28 +87,36 @@ public class BigEndianMemorySystem
 	{
 		for (int i = 0; i < memory.length;i++)
 		{
+			System.out.print("[");
 			for(int j = 0; j < memory[i].length;j++)
 			{
-				System.out.print(memory[i][j]);
+				System.out.print("[" + Integer.toHexString(memory[i][j]) + "]");
 			}
+			System.out.print("]");
 			System.out.println();
 		}
 	}
 	
+	//TODO Needs error checking for divisible by 4 (maybe should go in client?)
+	//TODO Create a thing for ints where it is 2 numbers per element
 	public void addData(String data, int row, Boolean isInt)
 	{
-		int actualRow = row / 4;
-		ArrayList dataArray = new ArrayList();
+		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
+		int col = 0; //0-3 position of the row
+		byte[] charData = data.getBytes(); //Converts data entered by user into a byte array
 		
-		for (int i = 0; i < data.length();i++)
+		//Goes through the users input character by character and inputs it into the correct memory location
+		for (byte character: charData)
 		{
-			dataArray.add(data[i]);
-		}
-		
-		for (int i = 0; i < dataArray.size();i++)
-		{
-			
-		}
-		
+			//if position > 4, resets it to zero. Memory only goes 0-3
+			if (col >= 4)
+			{
+				col = 0;
+				actualRow++; //goes up to next row when memory runs out of slots
+			}
+				
+			memory[actualRow][col] = character; //Commits temp to memory
+			col++; //Goes to next column
+		}		
 	}
 }
