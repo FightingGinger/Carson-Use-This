@@ -86,7 +86,7 @@ public class BigEndianMemorySystem
 	// description
 	public void printRawBytes()
 	{
-		for (int row = 0; row < 4;row++) //TODO change back to memory.length
+		for (int row = 0; row < memory.length;row++)
 		{
 			System.out.print("A" + (row * 4) + ": ");
 			System.out.print("[");
