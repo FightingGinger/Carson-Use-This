@@ -86,22 +86,43 @@ public class BigEndianMemorySystem
 	// description
 	public void printRawBytes()
 	{
-		for (int row = 0; row < memory.length;row++)
+		for (int row = 0; row < 4;row++) //TODO change back to memory.length
 		{
 			System.out.print("A" + (row * 4) + ": ");
 			System.out.print("[");
+			//System.out.println();
 			for(int col = 0; col < memory[row].length;col++)
 			{
-				System.out.print("[" + String.format("%02X", memory[row][col]) + "]");
+				System.out.print("[" + String.format("%02X", memory[row][col]) + "]"); //Outputs the hex
+				
 			}
+//			System.out.println();
+//			for (int col = 0; col < memory[row].length;col++)
+//			{
+//				System.out.print("[" + Integer.parseInt(Byte.toString(memory[row][col]), 16) + "]"); //Outputs the integer
+//			}
+			
 			System.out.print("]");
 			System.out.println();
 		}
 	}
 	
+	//Method called by client... Redirects to proper method depending on isInt flag
+	public void addData(String data, int row, boolean isInt)
+	{
+		if(isInt)
+		{
+			addIntData(Integer.parseInt(data), row);
+		}
+		else if(!isInt)
+		{
+			addStringData(data, row);
+		}
+	}
+	
 	//TODO Needs error checking for divisible by 4 (maybe should go in client?)
 	//TODO Put flags in memory to differentiate between Strings and ints
-	public void addStringData(String data, int row)
+	private void addStringData(String data, int row)
 	{
 		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
 		int col = 0; //0-3 position of the row
@@ -123,7 +144,7 @@ public class BigEndianMemorySystem
 	}
 	
 	//Same as above, but stores int data instead... 
-	public void addIntData(int data, int row)
+	private void addIntData(int data, int row)
 	{
 		int actualRow = row / 4; //converts the row entered by the user to the real row used by the array to mimic memory
 		int col = 0; //0-3 position of the row
