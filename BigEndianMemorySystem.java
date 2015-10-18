@@ -53,7 +53,7 @@ public class BigEndianMemorySystem
 	BigEndianMemorySystem()
 	{
 		//Fills the memory variable with zeros (yo)
-		for(int row = 0; row < 160; row++)
+		for(int row = 0; row < 20; row++)
 		{
 			for(int col = 0; col < 4; col++)
 			{
