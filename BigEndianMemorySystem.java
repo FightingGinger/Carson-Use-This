@@ -90,17 +90,66 @@ public class BigEndianMemorySystem
 		{
 			System.out.print("A" + (row * 4) + ": ");
 			System.out.print("[");
-			//System.out.println();
 			for(int col = 0; col < memory[row].length;col++)
 			{
 				System.out.print("[" + String.format("%02X", memory[row][col]) + "]"); //Outputs the hex
-				
 			}
-//			System.out.println();
-//			for (int col = 0; col < memory[row].length;col++)
-//			{
-//				System.out.print("[" + Integer.parseInt(Byte.toString(memory[row][col]), 16) + "]"); //Outputs the integer
-//			}
+			
+			System.out.print("]");
+			System.out.println();
+		}
+	}
+	
+	//Converts the data stored into int/strings based on flags and prints it
+	//TODO fix printing Strings... Only ints work right now
+	public void print()
+	{
+		boolean isInt = false;
+		boolean isChar = false;
+		for (int row = 0; row < memory.length;row++)
+		{
+			System.out.print("A" + (row * 4) + ": ");
+			System.out.print("[");
+			
+			for (int col = 0; col < 4; col++)
+			{
+				//Two flags for if the memory being read is currently a string, an integer, or neither
+				if(memory[row][col] == (byte)'$')
+				{
+					if (!isChar)
+					{
+						isChar = true;
+						System.out.print("[00]"); //Adds an element to make up for missing one
+					}
+					else
+					{
+						isChar = false;
+						System.out.print("[00]"); //Adds an element to make up for missing one
+					}
+				}
+				else if(memory[row][col] == (byte)'#')
+				{
+					if(!isInt)
+					{
+						isInt = true;
+					}
+					else
+					{
+						isInt = false;
+						System.out.print("[00][00]"); //Adds  more elements for the ones lost from the flags
+					}
+				}
+				else
+				{
+					//Outprints each byte as an int
+					if(isInt)
+						System.out.print("[" + memory[row][col] + "]");
+					else if(isChar)
+						System.out.print("[" + (char)memory[row][col]+ "]");
+					else
+						System.out.print("[" + String.format("%02X", memory[row][col]) + "]"); //Outputs the hex
+				}
+			}
 			
 			System.out.print("]");
 			System.out.println();
@@ -120,7 +169,6 @@ public class BigEndianMemorySystem
 		}
 	}
 	
-	//TODO Put flags in memory to differentiate between Strings and ints
 	//For characters, data is stored from right to left
 	private void addStringData(String data, int row)
 	{
@@ -128,6 +176,8 @@ public class BigEndianMemorySystem
 		int col = 3; //0-3 position of the row
 		byte[] rawData = data.getBytes(); //Converts data entered by user into a byte array
 		
+		memory[actualRow][col] = '$'; //Stores a flag for chars
+		col--;
 		//Goes through the users input character by character and inputs it into the correct memory location
 		for (byte character: rawData)
 		{
@@ -140,7 +190,15 @@ public class BigEndianMemorySystem
 				
 			memory[actualRow][col] = character; //Commits temp to memory
 			col--; //Goes to next column
-		}		
+		}
+		
+		//adds in closing row
+		if (col < 0)
+		{
+			col = 3;
+			actualRow++;
+		}
+		memory[actualRow][col] = '$';
 	}
 	
 	//Same as above, but stores int data instead... 
@@ -161,6 +219,9 @@ public class BigEndianMemorySystem
 			dataCopy = dataCopy >> 8; //Shifts data 8 bits to the right
 		}		
 		
+		memory[actualRow][col] = '#'; //Stores a flag for integers
+		col++;
+		
 		//Goes through the input byte array and inputs it into the correct memory location
 		for(byte unit : byteStorage)
 		{
@@ -173,6 +234,14 @@ public class BigEndianMemorySystem
 				
 			memory[actualRow][col] = unit; //Commits temp to memory
 			col++; //Goes to next column
-		}		
+		}
+		
+		//adds in closing flag
+		if(col >= 4)
+		{
+			col = 0;
+			actualRow++;
+		}
+		memory[actualRow][col] = '#';
 	}
 }
